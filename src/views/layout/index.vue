@@ -25,34 +25,34 @@
           active-text-color="#ffd04b">
           <el-submenu index="1">
             <template slot="title">
-              <i class="fas fa-user-secret"></i>
-              <span>导航一</span>
+              <i class="fas fa-user-secret fa-lg"></i>
+              <span>用户管理</span>
             </template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
+            <el-menu-item index="1-1">
+              <template slot="title">
+                <i class="el-icon-tickets"></i>
+                <span>用户列表</span>
+            </template>
+            </el-menu-item>
           </el-submenu>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航二</span>
-          </el-menu-item>
-          <el-menu-item index="3" disabled>
-            <i class="el-icon-document"></i>
-            <span slot="title">导航三</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-setting"></i>
-            <span slot="title">导航四</span>
-          </el-menu-item>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="fas fa-fist-raised fa-lg"></i>
+              <span>权限管理</span>
+            </template>
+            <el-menu-item index="2-1">
+              <template slot="title">
+                <i class="fas fa-user-astronaut fa-lg"></i>
+                <span>角色列表</span>
+            </template>
+            </el-menu-item>
+            <el-menu-item index="2-2">
+              <template slot="title">
+                <i class="fas fa-th-large"></i>
+                <span>权限列表</span>
+            </template>
+            </el-menu-item>
+          </el-submenu>
         </el-menu>
       </el-aside>
       <el-main>Main</el-main>
@@ -83,6 +83,7 @@ export default {
 }
 .el-header {
   background-color:  #b3c0d1;
+  height: 200px;
 }
 .el-main {
   background-color: #e9eef3;
@@ -97,5 +98,7 @@ export default {
 .el-col {
   line-height: 50px;
 }
-
+.fas {
+  margin-right: 10px;
+}
 </style>
