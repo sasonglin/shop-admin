@@ -55,7 +55,10 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <!-- Layout 的子路由将被渲染到这里 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
   </div>
