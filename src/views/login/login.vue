@@ -47,18 +47,19 @@ export default {
     },
     async Login () {
       const loginForm = this.loginForm
-      const { meta } = (await axios.post('http://localhost:8888/api/private/v1/login', loginForm)).data
+      const { data, meta } = (await axios.post('http://localhost:8888/api/private/v1/login', loginForm)).data
       if (meta.status === 200) {
-        this.checkTure(meta)
+        this.$message({
+          message: meta.msg,
+          type: 'success'
+        })
+        // 将收到的用户身份令牌放到本地存储中
+        window.localStorage.setItem('token', data.token)
+        // 成功登陆后跳转到之前界面或者Home界面
+        this.$router.replace('/')
       } else {
         this.checkFalse(meta)
       }
-    },
-    checkTure (meta) {
-      this.$message({
-        message: meta.msg,
-        type: 'success'
-      })
     },
     checkFalse (meta) {
       this.$message.error('登录失败：' + meta.msg)

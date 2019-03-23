@@ -9,7 +9,7 @@ import Roles from '@/views/Role/index.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     { path: '/login', component: Login },
     {
@@ -24,3 +24,25 @@ export default new Router({
     }
   ]
 })
+
+/**
+ * 路由拦截器，或者说导航守卫，所有请求都会经过它
+ * to 去哪里
+ * from 来自哪里
+ * next 通行方法
+ */
+router.beforeEach((to, from, next) => {
+  // 1. 如果请求的 /login ，则直接允许通过
+  if (to.path === '/login') {
+    next()
+  }
+  // 如果不是，就验证有没有token
+  const token = window.localStorage.getItem('token')
+  // 如果没有就跳转到login页面
+  if (!token) {
+    return next('/login')
+  }
+  next()
+})
+
+export default router

@@ -9,7 +9,10 @@
         </el-col>
       <el-col :span="18"><div class="grid-content bg-purple">黑马程序员</div></el-col>
       <el-col :span="2"><div class="grid-content bg-purple">
-        <a href="#">退出</a>
+          <el-button type="danger" round @click.prevent='handleLocalStorage'>
+            <i class="fas fa-sign-out-alt"></i>
+            <sapn>退出</sapn>
+          </el-button>
         </div></el-col>
     </el-row>
     </el-header>
@@ -53,6 +56,54 @@
             </template>
             </el-menu-item>
           </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="fab fa-product-hunt fa-lg"></i>
+              <span>商品管理</span>
+            </template>
+            <el-menu-item index="3-1">
+              <template slot="title">
+               <i class="fas fa-clipboard-list fa-lg"></i>
+                <span>商品列表</span>
+            </template>
+            </el-menu-item>
+            <el-menu-item index="3-2">
+              <template slot="title">
+                <i class="fab fa-steam-square fa-lg"></i>
+                <span>分类参数</span>
+            </template>
+            </el-menu-item>
+            <el-menu-item index="3-3">
+              <template slot="title">
+                <i class="fas fa-tag fa-lg"></i>
+                <span>商品分类</span>
+            </template>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="fas fa-phone-volume fa-lg"></i>
+              <span>订单管理</span>
+            </template>
+            <el-menu-item index="4-1">
+              <template slot="title">
+               <i class="fas fa-stream fa-lg"></i>
+                <span>订单列表</span>
+            </template>
+            </el-menu-item>
+            <el-menu-item index="4-2">
+              <template slot="title">
+               <i class="fas fa-database fa-lg"></i>
+                <span>数据统计</span>
+            </template>
+            </el-menu-item>
+            <el-menu-item index="4-3">
+              <template slot="title">
+                <i class="fas fa-server fa-lg"></i>
+                <span>数据报表</span>
+              </template>
+            </el-menu-item>
+          </el-submenu>
         </el-menu>
       </el-aside>
       <el-main>
@@ -72,6 +123,10 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath);
+    },
+    handleLocalStorage () {
+      window.localStorage.removeItem('token')
+      this.$router.push('/login')
     }
   }
 }
@@ -101,7 +156,7 @@ export default {
 .el-col {
   line-height: 50px;
 }
-.fas {
+.fas,.fab{
   margin-right: 10px;
 }
 </style>
