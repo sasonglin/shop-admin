@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import req from '@/utils/request.js'
 
 export default {
   name: 'Login',
@@ -47,7 +47,7 @@ export default {
     },
     async Login () {
       const loginForm = this.loginForm
-      const { data, meta } = (await axios.post('http://localhost:8888/api/private/v1/login', loginForm)).data
+      const { data, meta } = (await req.post('/login', loginForm)).data
       if (meta.status === 200) {
         this.$message({
           message: meta.msg,
@@ -56,7 +56,8 @@ export default {
         // 将收到的用户身份令牌放到本地存储中
         window.localStorage.setItem('token', data.token)
         // 成功登陆后跳转到之前界面或者Home界面
-        this.$router.replace('/')
+        const resURL = this.$route.query.redirect || '/'
+        this.$router.replace(resURL);
       } else {
         this.checkFalse(meta)
       }

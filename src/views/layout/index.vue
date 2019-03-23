@@ -11,7 +11,7 @@
       <el-col :span="2"><div class="grid-content bg-purple">
           <el-button type="danger" round @click.prevent='handleLocalStorage'>
             <i class="fas fa-sign-out-alt"></i>
-            <sapn>退出</sapn>
+           退出
           </el-button>
         </div></el-col>
     </el-row>

@@ -5,8 +5,20 @@
 </template>
 
 <script>
+import req from '@/utils/request.js';
 export default {
-
+  name: 'UserList',
+  async  created () {
+    const resData = await req({
+      method: 'get',
+      url: '/users',
+      params: {
+        pagenum: 1,
+        pagesize: 5
+      }
+    })
+    console.log(resData);
+  }
 }
 </script>
 
