@@ -6,6 +6,7 @@ import Layout from '@/views/layout/index.vue'
 import Home from '@/views/Home/index.vue'
 import Users from '@/views/Users/index.vue'
 import Roles from '@/views/Role/index.vue'
+import { getToken } from '@/utils/auth.js'
 
 Vue.use(Router)
 
@@ -37,7 +38,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
   // 如果不是，就验证有没有token
-  const token = window.localStorage.getItem('token')
+  const token = getToken()
   // 如果没有就跳转到login页面
   if (!token) {
     return next('/login')

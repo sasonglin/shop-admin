@@ -16,6 +16,7 @@
 
 <script>
 import req from '@/utils/request.js'
+import { setToken } from '@/utils/auth.js'
 
 export default {
   name: 'Login',
@@ -54,7 +55,8 @@ export default {
           type: 'success'
         })
         // 将收到的用户身份令牌放到本地存储中
-        window.localStorage.setItem('token', data.token)
+        // window.localStorage.setItem('token', data.token)
+        setToken('token', data.token)
         // 成功登陆后跳转到之前界面或者Home界面
         const resURL = this.$route.query.redirect || '/'
         this.$router.replace(resURL);

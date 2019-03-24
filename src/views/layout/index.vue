@@ -22,18 +22,6 @@ import AppHeader from './header.vue'
 import Navmean from './navmean'
 
 export default {
-  methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleLocalStorage () {
-      window.localStorage.removeItem('token')
-      this.$router.push('/login')
-    }
-  },
   components: {
     AppHeader,
     Navmean

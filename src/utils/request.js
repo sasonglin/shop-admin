@@ -1,6 +1,7 @@
 // 请求模块: 统一封装 axios 的使用
 import axios from 'axios'
 import router from '@/routes/index'
+import { getToken } from '@/utils/auth.js'
 // 设置 baseURL ， 下方是简单方式，适用于只有一个接口路径
 // axios.defaults.baseURL = 'https://api.example.com'
 
@@ -21,7 +22,7 @@ req.interceptors.request.use(function (config) {
   console.log(config.url)
   // 在每次请求的时候(非login请求)进行拦截，统一添加 token (除了login)
   if (config.url !== '/login') {
-    config.headers.Authorization = window.localStorage.getItem('token')
+    config.headers.Authorization = getToken()
   }
   // 通过请求拦截
   return config;

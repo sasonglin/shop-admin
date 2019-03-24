@@ -15,8 +15,15 @@
 </template>
 
 <script>
+import { removeToken } from '@/utils/auth.js'
 export default {
-  name: 'AppHeader'
+  name: 'AppHeader',
+  methods: {
+    handleLocalStorage () {
+      removeToken();
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 
