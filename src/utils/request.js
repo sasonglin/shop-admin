@@ -46,7 +46,7 @@ req.interceptors.response.use(function (response) {
     // 如果结果验证为 401 就跳转回login页面,跳转路径中包含之前想要访问的页面路径
     // 登陆成功后可以直接返回需要访问的页面，不是首页（登录成功回到原来的页面）
     // 这里用fullPath是因为返回的原路径可能带有参数
-    router.replace(`/login?redirect=${router.currentRoute.fullPath}`)
+    return router.replace(`/login?redirect=${router.currentRoute.fullPath}`)
   }
   // 通过响应拦截
   return response;

@@ -22,6 +22,7 @@
           default-active="2"
           class="el-menu-vertical-demo"
           @open="handleOpen"
+          :router="true"
           @close="handleClose"
           background-color="#545c64"
           text-color="#fff"
@@ -31,7 +32,7 @@
               <i class="fas fa-user-secret fa-lg"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="1-1">
+            <el-menu-item index="/users">
               <template slot="title">
                 <i class="el-icon-tickets"></i>
                 <span>用户列表</span>
@@ -140,14 +141,13 @@ export default {
   height: 100%;
 }
 .el-header {
-  background-color:  #b3c0d1;
+  background-color:  #fff;
   height: 200px;
 }
 .el-main {
-  background-color: #e9eef3;
+  background-color: darkgrey;
 }
 .el-aside {
-  background-color: #d3dce6;
   height: 100%;
 }
 .el-menu {

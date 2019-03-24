@@ -72,7 +72,8 @@ export default {
 <style scoped>
 .login-wrap {
   height: 100%;
-  background-color: #2f4050;
+  background-image: url('./timg5.jpg');
+  background-size:cover;
   display: flex;
   justify-content: center;
   align-items: center;
