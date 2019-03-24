@@ -1,6 +1,7 @@
 // 请求模块: 统一封装 axios 的使用
 import axios from 'axios'
 import router from '@/routes/index'
+// 引用 token 封装方法
 import { getToken } from '@/utils/auth.js'
 // 设置 baseURL ， 下方是简单方式，适用于只有一个接口路径
 // axios.defaults.baseURL = 'https://api.example.com'

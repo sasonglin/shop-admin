@@ -8,7 +8,7 @@ export const getToken = () => {
 }
 
 // 设置 token 值
-export const setToken = (token) => {
+export const setToken = token => {
   return localStorage.setItem(TOKEN_KEY, token)
 }
 

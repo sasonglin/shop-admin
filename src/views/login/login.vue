@@ -15,8 +15,10 @@
 </template>
 
 <script>
-import req from '@/utils/request.js'
+// 引用 token 封装方法
 import { setToken } from '@/utils/auth.js'
+// 引用 登录 请求的api
+import { login } from '@/api/index.js'
 
 export default {
   name: 'Login',
@@ -47,8 +49,9 @@ export default {
       })
     },
     async Login () {
-      const loginForm = this.loginForm
-      const { data, meta } = (await req.post('/login', loginForm)).data
+      // const loginForm = this.loginForm
+      // const { data, meta } = (await req.post('/login', loginForm)).data
+      const { data, meta } = await login(this.loginForm)
       if (meta.status === 200) {
         this.$message({
           message: meta.msg,
@@ -56,7 +59,7 @@ export default {
         })
         // 将收到的用户身份令牌放到本地存储中
         // window.localStorage.setItem('token', data.token)
-        setToken('token', data.token)
+        setToken(data.token)
         // 成功登陆后跳转到之前界面或者Home界面
         const resURL = this.$route.query.redirect || '/'
         this.$router.replace(resURL);
