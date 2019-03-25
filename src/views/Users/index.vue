@@ -78,7 +78,9 @@
               <el-button size="mini" type="danger" round
               @click="handleDelete(scope.row.id)"
               >删除</el-button>
-              <el-button size="mini" type="warning" round>分配角色</el-button>
+              <el-button
+              @click="$refs.showRoleFormEL.showRoleDialog(scope.row)"
+              size="mini" type="warning" round>分配角色</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -109,6 +111,9 @@
     @editSuccess = 'loadList'
     ></UserEdit>
     <!-- /用户编辑界面 -->
+    <!-- 角色分配界面 -->
+    <UserEditRole ref="showRoleFormEL"></UserEditRole>
+    <!-- /角色分配界面 -->
   </div>
 </template>
 
@@ -117,6 +122,9 @@
 import * as Users from '@/api/users.js'
 // 引入用户编辑模块
 import UserEdit from './edit'
+// 引入角色分配模块
+import UserEditRole from './edit-role'
+
 export default {
   name: 'UserList',
   async  created () {
@@ -234,7 +242,8 @@ export default {
     }
   },
   components: {
-    UserEdit
+    UserEdit,
+    UserEditRole
   }
 }
 </script>
