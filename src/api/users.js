@@ -36,3 +36,9 @@ export const updateById = () => req({
 // 根据id查询用户
 export const findById = () => req({
 })
+
+// 改变用户状态
+export const changeState = (id, state) => req({
+  method: 'put',
+  url: `/users/${id}/state/${state}`
+}).then(res => res.data)

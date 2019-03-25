@@ -43,17 +43,28 @@
             width="150px"
             >
           </el-table-column>
+          <!--
+            自定义表格列
+            自定义内容写到
+            <template slot-scope="scope"></template> 里面
+            scope.row 就是遍历的数组元素
+            scope.$index 就是遍历的索引
+          -->
           <el-table-column
             label="状态"
             width="150px">
-            <el-switch
-              style="display: block"
-              v-model="value4"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="开启"
-              inactive-text="禁用">
-            </el-switch>
+            <template slot-scope="scope">
+              <el-switch
+                style="display: block"
+                v-model="scope.row.mg_state"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="开启"
+                inactive-text="禁用"
+                @change="handleChangeState(scope.row)"
+                >
+              </el-switch>
+            </template>
           </el-table-column>
            <el-table-column
             prop="email"
@@ -173,6 +184,16 @@ export default {
     handleEdit () {
     },
     handleDelete () {
+    },
+    async handleChangeState (item) {
+      const { data, meta } = await Users.changeState(item.id, item.mg_state)
+      console.log(Users.changeState());
+      if (meta.status === 200) {
+        this.$message({
+          message: `${data.mg_state ? '启用' : '禁用'}用户状态成功`,
+          type: 'success'
+        })
+      }
     }
   }
 }
