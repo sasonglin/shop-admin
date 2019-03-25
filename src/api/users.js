@@ -5,7 +5,7 @@ import req from '@/utils/request'
 
 // 显示用户列表信息
 export const find = ({ pagenum = 1, pagesize = 5 }) => req({
-  methods: 'get',
+  method: 'get',
   url: '/users',
   params: { // GET 参数
     pagenum,
@@ -14,8 +14,16 @@ export const find = ({ pagenum = 1, pagesize = 5 }) => req({
 }).then(res => res.data)
 
 // 添加用户信息
-export const create = () => req({
-})
+export const create = ({ username, password, email, mobile }) => req({
+  method: 'post',
+  url: '/users',
+  data: {
+    username,
+    password,
+    email,
+    mobile
+  }
+}).then(res => res.data)
 
 // 删除用户信息
 export const deleteById = () => req({
