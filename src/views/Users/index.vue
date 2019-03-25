@@ -25,6 +25,7 @@
           :data="users"
           stripe
           border
+          v-loading="tableLoading"
           style="width: 100%">
           <el-table-column type="index"></el-table-column>
           <el-table-column
@@ -56,6 +57,7 @@
             <template slot-scope="scope">
               <el-switch
                 style="display: block"
+                :disabled="scope.row.stateDisabled"
                 v-model="scope.row.mg_state"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
@@ -74,7 +76,7 @@
               @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button>
               <el-button size="mini" type="danger" round
-              @click="handleDelete(scope.$index, scope.row)"
+              @click="handleDelete(scope.row.id)"
               >删除</el-button>
               <el-button size="mini" type="warning" round>分配角色</el-button>
             </template>
@@ -126,13 +128,12 @@ export default {
       users: [],
       searchText: '',
       addFormList: false,
+      tableLoading: true,
       addFormData: {
         username: '',
         password: '',
         email: '',
-        mobile: '',
-        value3: true,
-        value4: false
+        mobile: ''
       },
       addFormRules: {
         username: [
@@ -152,9 +153,14 @@ export default {
   },
   methods: {
     async loadList () {
+      this.tableLoading = true // 开始请求的时候进入loading状态
       const { data, meta } = await Users.find({ pagenum: 1, pagesize: 100 })
       if (meta.status === 200) {
+        data.users.forEach(item => {
+          item.stateDisabled = false// 在初始化界面的时候填入属性，控制状态按钮是否禁用，默认情况下不禁用
+        })
         this.users = data.users
+        this.tableLoading = false // 请求结束，关闭loading状态
       }
     },
     handleAdd () {
@@ -183,9 +189,29 @@ export default {
     },
     handleEdit () {
     },
-    handleDelete () {
+    async handleDelete (id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const { meta } = await Users.deleteById(id)
+        if (meta.status === 200) {
+          this.loadList()
+          this.$message({
+            message: `${meta.msg}`,
+            type: 'success'
+          })
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
     async handleChangeState (item) {
+      item.stateDisabled = true // 发送请求时将状态按钮设为禁用状态，防止网速过慢，用户乱点情况
       const { data, meta } = await Users.changeState(item.id, item.mg_state)
       console.log(Users.changeState());
       if (meta.status === 200) {
@@ -194,6 +220,10 @@ export default {
           type: 'success'
         })
       }
+      item.stateDisabled = false // 无论结果如何，请求完毕后将按钮的状态设为可用
+    },
+    handleAlter () {
+      alert(111)
     }
   }
 }

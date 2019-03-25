@@ -26,8 +26,10 @@ export const create = ({ username, password, email, mobile }) => req({
 }).then(res => res.data)
 
 // 删除用户信息
-export const deleteById = () => req({
-})
+export const deleteById = (id) => req({
+  method: 'delete',
+  url: `/users/${id}`
+}).then(res => res.data)
 
 // 修改用户信息
 export const updateById = () => req({
