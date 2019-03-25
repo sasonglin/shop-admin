@@ -31,13 +31,21 @@ export const deleteById = (id) => req({
   url: `/users/${id}`
 }).then(res => res.data)
 
-// 修改用户信息
-export const updateById = () => req({
-})
+// 编辑用户信息
+export const updateUserById = (id, data) => req({
+  method: 'put',
+  url: `/users/${id}`,
+  data: {
+    email: data.email,
+    mobile: data.mobile
+  }
+}).then(res => res.data)
 
 // 根据id查询用户
-export const findById = () => req({
-})
+export const findUserById = (id) => req({
+  method: 'get',
+  url: `/users/${id}`
+}).then(res => res.data)
 
 // 改变用户状态
 export const changeState = (id, state) => req({

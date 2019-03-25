@@ -73,7 +73,7 @@
             label="操作">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" round
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="$refs.editFormEL.showEditDialog(scope.row)"
               >编辑</el-button>
               <el-button size="mini" type="danger" round
               @click="handleDelete(scope.row.id)"
@@ -104,12 +104,19 @@
         <el-button type="primary" @click="handleAdd">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 用户编辑界面 -->
+    <UserEdit ref="editFormEL"
+    @editSuccess = 'loadList'
+    ></UserEdit>
+    <!-- /用户编辑界面 -->
   </div>
 </template>
 
 <script>
 // import req from '@/utils/request.js';
 import * as Users from '@/api/users.js'
+// 引入用户编辑模块
+import UserEdit from './edit'
 export default {
   name: 'UserList',
   async  created () {
@@ -225,6 +232,9 @@ export default {
     handleAlter () {
       alert(111)
     }
+  },
+  components: {
+    UserEdit
   }
 }
 </script>
