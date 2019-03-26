@@ -52,3 +52,6 @@ export const changeState = (id, state) => req({
   method: 'put',
   url: `/users/${id}/state/${state}`
 }).then(res => res.data)
+
+// 修改角色
+

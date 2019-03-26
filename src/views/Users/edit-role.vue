@@ -5,6 +5,15 @@
         <el-input v-model="roleFormData.username" autocomplete="off" disabled></el-input>
       </el-form-item>
       <el-form-item label="角色 :" label-width="75px" prop="email">
+        <el-select placeholder="请选择" v-model="roleFormData.rid">
+          <el-option label="请选择" :value="-1"></el-option>
+          <el-option
+            v-for="item in roles"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -15,22 +24,33 @@
 </template>
 
 <script>
+import { findUserById } from '@/api/users.js'
+import { getRoleList } from '@/api/role.js'
 export default {
   name: 'UserEditRole',
   data () {
     return {
-      roleFormList: true,
+      roleFormList: false,
       roleFormData: {
-        username: '',
-        email: '',
-        mobile: ''
-      }
+        username: ''
+      },
+      roles: []
     }
   },
   methods: {
     handleRole () {
     },
-    showRoleDialog (item) {
+    async showRoleDialog (item) {
+      const { data, meta } = await findUserById(item.id)
+      if (meta.status === 200) {
+        this.roleFormData = data
+        this.roleFormList = true
+      }
+
+      const { data: roleData, meta: roleMeta } = await getRoleList()
+      if (roleMeta.status === 200) {
+        this.roles = roleData
+      }
     }
   }
 }
