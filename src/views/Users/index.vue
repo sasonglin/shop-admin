@@ -84,6 +84,11 @@
             </template>
           </el-table-column>
         </el-table>
+        <!-- 分页操作
+        page-size：每页显示条目个数，支持 .sync 修饰符
+        current-change：currentPage 改变时会触发
+        total:总条目数
+         -->
         <el-pagination
           background
           :page-size="5"
