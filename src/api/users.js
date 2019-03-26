@@ -4,12 +4,13 @@ import req from '@/utils/request'
 // 用户列表
 
 // 显示用户列表信息
-export const find = ({ pagenum = 1, pagesize = 5 }) => req({
+export const find = ({ pagenum = 1, pagesize = 5, query = '' }) => req({
   method: 'get',
   url: '/users',
   params: { // GET 参数
     pagenum,
-    pagesize
+    pagesize,
+    query
   }
 }).then(res => res.data)
 
@@ -54,4 +55,10 @@ export const changeState = (id, state) => req({
 }).then(res => res.data)
 
 // 修改角色
-
+export const changeRole = (userId, roleId) => req({
+  method: 'put',
+  url: `/users/${userId}/role`,
+  data: {
+    rid: roleId
+  }
+}).then(res => res.data)

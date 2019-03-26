@@ -20,7 +20,7 @@ const req = axios.create({
 // 添加一个请求拦截器
 // config 是请求体
 req.interceptors.request.use(function (config) {
-  console.log(config.url)
+  // console.log(config.url)
   // 在每次请求的时候(非login请求)进行拦截，统一添加 token (除了login)
   if (config.url !== '/login') {
     config.headers.Authorization = getToken()

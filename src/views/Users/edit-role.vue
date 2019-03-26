@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { findUserById } from '@/api/users.js'
+import { findUserById, changeRole } from '@/api/users.js'
 import { getRoleList } from '@/api/role.js'
 export default {
   name: 'UserEditRole',
@@ -38,18 +38,44 @@ export default {
     }
   },
   methods: {
-    handleRole () {
-    },
-    async showRoleDialog (item) {
-      const { data, meta } = await findUserById(item.id)
+    async handleRole () {
+      const { id: userId, rid: roleId } = this.roleFormData
+      const { meta } = await changeRole(userId, roleId)
+      console.log(meta)
       if (meta.status === 200) {
-        this.roleFormData = data
+        this.$message({
+          message: `${meta.msg}`,
+          type: 'success'
+        })
+        this.roleFormList = false
+      }
+    },
+    // 异步串行模式
+    // async showRoleDialog (item) {
+    //   const { data, meta } = await findUserById(item.id)
+    //   if (meta.status === 200) {
+    //     this.roleFormData = data
+    //     this.roleFormList = true
+    //   }
+
+    //   const { data: roleData, meta: roleMeta } = await getRoleList()
+    //   if (roleMeta.status === 200) {
+    //     this.roles = roleData
+    //   }
+    // }
+
+    // 异步并行
+    async showRoleDialog (item) {
+      const [userData, roleData] = await Promise.all([
+        findUserById(item.id),
+        getRoleList()
+      ])
+      if (userData.meta.status === 200) {
+        this.roleFormData = userData.data
         this.roleFormList = true
       }
-
-      const { data: roleData, meta: roleMeta } = await getRoleList()
-      if (roleMeta.status === 200) {
-        this.roles = roleData
+      if (roleData.meta.status === 200) {
+        this.roles = roleData.data
       }
     }
   }

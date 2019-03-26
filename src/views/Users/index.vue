@@ -13,7 +13,7 @@
       <el-row :gutter="20">
         <el-col :span="7">
           <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="loadList()"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -84,6 +84,14 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          background
+          :page-size="5"
+          layout="prev, pager, next"
+          :total="UserTotal"
+          @current-change="loadList"
+          >
+        </el-pagination>
       </template>
     </el-card>
     <el-dialog title="添加用户" :visible.sync="addFormList" width=40%>
@@ -140,6 +148,7 @@ export default {
   },
   data () {
     return {
+      UserTotal: 0,
       users: [],
       searchText: '',
       addFormList: false,
@@ -167,14 +176,16 @@ export default {
     }
   },
   methods: {
-    async loadList () {
+    async loadList (page = 1) {
       this.tableLoading = true // 开始请求的时候进入loading状态
-      const { data, meta } = await Users.find({ pagenum: 1, pagesize: 100 })
+      const { data, meta } = await Users.find({ pagenum: page, pagesize: 5, query: this.searchText })
       if (meta.status === 200) {
         data.users.forEach(item => {
           item.stateDisabled = false// 在初始化界面的时候填入属性，控制状态按钮是否禁用，默认情况下不禁用
         })
+        console.log(data)
         this.users = data.users
+        this.UserTotal = data.total
         this.tableLoading = false // 请求结束，关闭loading状态
       }
     },
@@ -205,7 +216,7 @@ export default {
     handleEdit () {
     },
     async handleDelete (id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作会删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -249,6 +260,10 @@ export default {
 </script>
 
 <style scoped>
+.main {
+  height: 100%;
+}
+
 .el-card {
  height: 100%;
 }
@@ -258,5 +273,8 @@ export default {
 
 .el-input__inner {
   width: 600px;
+}
+.el-pagination {
+  padding-top: 15px;
 }
 </style>
