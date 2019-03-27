@@ -6,6 +6,7 @@ import Layout from '@/views/layout/index.vue'
 import Home from '@/views/Home/index.vue'
 import Users from '@/views/Users/index.vue'
 import Roles from '@/views/Role/index.vue'
+import Rights from '@/views/Rights/index.vue'
 import { getToken } from '@/utils/auth.js'
 
 Vue.use(Router)
@@ -20,7 +21,8 @@ const router = new Router({
         // Home 展示到父路由的 router-view 中，path 为空，则默认作为 / Layout 展示的组件
         { path: '', component: Home },
         { path: '/users', component: Users },
-        { path: '/roles', component: Roles }
+        { path: '/roles', component: Roles },
+        { path: '/rights', component: Rights }
       ]
     }
   ]
