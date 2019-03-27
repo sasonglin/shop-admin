@@ -20,6 +20,7 @@
             <template slot-scope="scope">
               <el-row class="first" v-for="first in scope.row.children" :key="first.id">
                 <el-col :span='4'>
+                  <hr>
                  <el-tag closable>{{ first.authName }}</el-tag>
                   <i class="el-icon-arrow-right"></i>
                 </el-col>
@@ -65,20 +66,27 @@
               <el-button size="mini" type="danger" round
               @click="handleRoleDelete(scope.row.id)"
               >删除</el-button>
+              <el-button
+              @click="$refs.showRightsEL.showRightList(scope.row)"
+              size="mini" type="warning" round>角色授权</el-button>
             </template>
           </el-table-column>
         </el-table>
       </template>
     </el-card>
+    <!-- 新增 -->
     <RoleAdd ref = 'showAddFormEL'
     @successAdd = 'loadList'
     ></RoleAdd>
+    <!-- 角色授权 -->
+    <RightsList ref = 'showRightsEL'></RightsList>
   </div>
 </template>
 
 <script>
 import * as Roles from '@/api/role.js'
 import RoleAdd from './role-add.vue'
+import RightsList from './edit-right.vue'
 export default {
   created () {
     this.loadList()
@@ -120,7 +128,8 @@ export default {
     }
   },
   components: {
-    RoleAdd
+    RoleAdd,
+    RightsList
   }
 }
 </script>
