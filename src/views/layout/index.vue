@@ -11,7 +11,8 @@
       <el-main>
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <AppBreadcrumb :list="[{ label: '首页', path: '/' }, { label: '权限管理' }, { label: '角色列表' }]"></AppBreadcrumb>
+            <!-- <AppBreadcrumb :list="[{ label: '首页', path: '/' }, { label: '权限管理' }, { label: '角色列表' }]"></AppBreadcrumb> -->
+            <AppBreadcrumb :list="getAppBreadcrumbs()"></AppBreadcrumb>
           </div>
         <!-- Layout 的子路由将被渲染到这里 -->
         <router-view></router-view>
@@ -27,6 +28,17 @@ import AppHeader from './header.vue'
 import Navmean from './navmean'
 
 export default {
+  methods: {
+    getAppBreadcrumbs () {
+      const bread = [{ label: '首页', path: '/' }]
+      this.$route.matched.slice(1).forEach(route => {
+        bread.push({
+          label: route.meta.label
+        })
+      })
+      return bread
+    }
+  },
   components: {
     AppHeader,
     Navmean

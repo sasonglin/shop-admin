@@ -1,3 +1,10 @@
+/**
+  * 路由路径对应的是页面导航路径
+  * 一般的管理系统都有用户-角色-权限功能
+  * 用户的能看到的导航菜单是不一样的，权限菜单数据都是后端处理给出
+  * 所以就需要和后端协商好页面导航的路径字符
+*/
+
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -17,12 +24,33 @@ const router = new Router({
     {
       path: '/',
       component: Layout,
+      meta: { label: '首页' },
       children: [
         // Home 展示到父路由的 router-view 中，path 为空，则默认作为 / Layout 展示的组件
         { path: '', component: Home },
-        { path: '/users', component: Users },
-        { path: '/roles', component: Roles },
-        { path: '/rights', component: Rights }
+        {
+          path: '/users',
+          component: {
+            render: c => c('router-view') // 这个路由是一个直接渲染了 router-view 标签的组件
+          },
+          meta: { label: '用户管理' },
+          children: [
+            { path: '/users/users', component: Users, meta: { label: '用户列表' } }
+          ]
+        },
+        {
+          path: '/rights',
+          component: {
+            render: c => c('router-view')
+          },
+          meta: { label: '权限管理' },
+          children: [
+            { path: '/rights/roles', component: Roles, meta: { label: '角色管理' } },
+            { path: '/rights/rights', component: Rights, meta: { label: '权限列表' } }
+          ]
+        }
+        // { path: '/roles', component: Roles },
+        // { path: '/rights', component: Rights }
       ]
     }
   ]

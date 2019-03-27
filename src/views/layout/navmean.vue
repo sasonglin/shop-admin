@@ -13,7 +13,7 @@
         <i class="fas fa-user-secret fa-lg"></i>
         <span>{{ first.authName }}</span>
       </template>
-      <el-menu-item v-for="second in first.children" :key='second.id' :index="`/${second.path}`">
+      <el-menu-item v-for="second in first.children" :key='second.id' :index="`/${first.path}/${second.path}`">
         <template slot="title">
           <i class="el-icon-tickets"></i>
           <span>{{ second.authName }}</span>
