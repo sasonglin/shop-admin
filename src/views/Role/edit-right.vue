@@ -4,6 +4,7 @@
       :data="rights"
       show-checkbox
       default-expand-all
+      ref ='tree'
       node-key="id"
       :default-checked-keys="defaultChecked"
       :props="defaultProps">
@@ -17,11 +18,13 @@
 
 <script>
 import { getRightsList } from '@/api/rights.js'
+import { updataRightList } from '@/api/role.js'
 export default {
   name: 'RoleEditRights',
   data () {
     return {
       RightsList: false,
+      role: {},
       rights: [],
       defaultProps: {
         children: 'children',
@@ -32,6 +35,7 @@ export default {
   },
   methods: {
     showRightList (role) {
+      this.role = role
       this.loadRight()
       this.getRightsCheck(role.children)
       this.RightsList = true
@@ -54,6 +58,18 @@ export default {
       this.defaultChecked = tmp
     },
     async handleRightEdit () {
+      // 角色授权-获取用户选中的权限树中的节点id
+      const treeEL = this.$refs.tree
+      const rids = [...treeEL.getCheckedKeys(), ...treeEL.getHalfCheckedKeys()].join(',')
+      const { meta } = await updataRightList(this.role.id, rids)
+      if (meta.status === 200) {
+        this.$message({
+          message: `${meta.msg}`,
+          type: 'success'
+        })
+        this.$emit('editRightsuccess')
+        this.RightsList = false
+      }
     }
   }
 }

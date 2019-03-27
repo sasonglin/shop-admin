@@ -18,21 +18,28 @@
           style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="scope">
+               <!-- 一级 -->
               <el-row class="first" v-for="first in scope.row.children" :key="first.id">
                 <el-col :span='4'>
                   <hr>
-                 <el-tag closable>{{ first.authName }}</el-tag>
+                 <el-tag closable @close="handleDeleteRights(scope.row, first)">{{ first.authName }}</el-tag>
                   <i class="el-icon-arrow-right"></i>
                 </el-col>
                 <hr>
                 <el-col :span="20">
+                   <!-- 二级 -->
                   <el-row class="second" v-for="second in first.children" :key="second.id">
                     <el-col :span="4">
-                      <el-tag closable type="success">{{ second.authName }}</el-tag>
+                      <el-tag closable type="success" @close="handleDeleteRights(scope.row, second)">{{ second.authName }}</el-tag>
                       <i class="el-icon-arrow-right"></i>
                     </el-col>
                     <el-col :span="20">
-                      <el-tag class="third" v-for="third in second.children" :key="third.id" closable type="warning">{{ third.authName }}</el-tag>
+                       <!-- 三级 -->
+                      <el-tag class="third"
+                       @close="handleDeleteRights(scope.row, third)"
+                       v-for="third in second.children"
+                       :key="third.id"
+                        closable type="warning">{{ third.authName }}</el-tag>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -79,7 +86,9 @@
     @successAdd = 'loadList'
     ></RoleAdd>
     <!-- 角色授权 -->
-    <RightsList ref = 'showRightsEL'></RightsList>
+    <RightsList ref = 'showRightsEL'
+    @editRightsuccess = 'loadList'
+    ></RightsList>
   </div>
 </template>
 
