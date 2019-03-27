@@ -2,13 +2,6 @@
   <div class="main">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-          <el-breadcrumb-item>权限管理</el-breadcrumb-item>
-          <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-          <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        </el-breadcrumb> -->
         <AppBreadcrumb :list="[{ label: '首页', path: '/' }, { label: '权限管理' }, { label: '角色列表' }]"></AppBreadcrumb>
       </div>
       <el-row :gutter="20">
