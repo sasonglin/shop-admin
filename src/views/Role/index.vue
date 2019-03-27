@@ -134,6 +134,17 @@ export default {
           message: '已取消删除'
         });
       });
+    },
+    async handleDeleteRights (role, rights) {
+      const { data, meta } = await Roles.deleteRightsByRoleId(role.id, rights.id)
+      if (meta.status === 200) {
+        this.$message({
+          message: `成功删除此权限`,
+          type: 'success'
+        })
+        // 将服务端返回的最新角色权限列表重新赋值给当前角色
+        role.children = data
+      }
     }
   },
   components: {
