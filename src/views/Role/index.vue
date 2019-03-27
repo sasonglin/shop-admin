@@ -2,13 +2,14 @@
   <div class="main">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
+        <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>用户管理</el-breadcrumb-item>
           <el-breadcrumb-item>权限管理</el-breadcrumb-item>
           <el-breadcrumb-item>商品管理</el-breadcrumb-item>
           <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        </el-breadcrumb>
+        </el-breadcrumb> -->
+        <AppBreadcrumb :list="[{ label: '首页', path: '/' }, { label: '权限管理' }, { label: '角色列表' }]"></AppBreadcrumb>
       </div>
       <el-row :gutter="20">
         <el-col :span="4">
@@ -17,27 +18,21 @@
       </el-row>
       <template>
         <el-table
-          :data="users"
+          :data="roles"
           stripe
           border
           v-loading="tableLoading"
           style="width: 100%">
           <el-table-column type="index"></el-table-column>
           <el-table-column
-            prop="username"
-            label="姓名"
+            prop="roleName"
+            label="角色名称"
             width="200px">
           </el-table-column>
           <el-table-column
-            prop="email"
-            label="邮箱"
-            width="200px">
-          </el-table-column>
-          <el-table-column
-            prop="mobile"
-            label="电话"
-            width="150px"
-            >
+            prop="roleDesc"
+            label="描述"
+            width="300px">
           </el-table-column>
           <!--
             自定义表格列
@@ -49,10 +44,11 @@
           <el-table-column
             prop="email"
             label="操作">
-            <template slot-scope="">
+            <template slot-scope="scope">
               <el-button size="mini" type="primary" round
               >编辑</el-button>
               <el-button size="mini" type="danger" round
+              @click="handleRoleDelete(scope.row.id)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -63,11 +59,50 @@
 </template>
 
 <script>
+import * as Roles from '@/api/role.js'
 export default {
-
+  created () {
+    this.loadList()
+  },
+  data () {
+    return {
+      roles: [],
+      tableLoading: true
+    }
+  },
+  methods: {
+    async loadList () {
+      const { data, meta } = await Roles.getRoleList()
+      if (meta.status === 200) {
+        this.roles = data
+        this.tableLoading = false
+      }
+    },
+    async handleRoleDelete (id) {
+      const { meta } = await Roles.deleteRoleById(id)
+      if (meta.status === 200) {
+        this.$message({
+          message: `${meta.msg}`,
+          type: 'success'
+        })
+        this.loadList()
+      }
+    }
+  },
+  components: {
+  }
 }
 </script>
 
 <style>
+.main {
+  height: 100%;
+}
 
+.el-card {
+ height: 100%;
+}
+.el-table {
+  margin-top: 15px;
+}
 </style>

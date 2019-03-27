@@ -25,7 +25,7 @@
         <i class="fas fa-fist-raised fa-lg"></i>
         <span>权限管理</span>
       </template>
-      <el-menu-item index="2-1">
+      <el-menu-item index="/roles">
         <template slot="title">
           <i class="fas fa-user-astronaut fa-lg"></i>
           <span>角色列表</span>

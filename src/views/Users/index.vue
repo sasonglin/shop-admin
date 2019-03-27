@@ -2,13 +2,7 @@
   <div class="main">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-          <el-breadcrumb-item>权限管理</el-breadcrumb-item>
-          <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-          <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        </el-breadcrumb>
+        <AppBreadcrumb :list="[{ label: '首页', path: '/' }, { label: '用户管理' }, { label: '用户列表' }]"></AppBreadcrumb>
       </div>
       <el-row :gutter="20">
         <el-col :span="7">
@@ -89,13 +83,21 @@
         current-change：currentPage 改变时会触发
         total:总条目数
          -->
-        <el-pagination
+        <!-- <el-pagination
           background
           :page-size="5"
           layout="prev, pager, next"
           :total="UserTotal"
           @current-change="loadList"
           >
+        </el-pagination> -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="page"
+          :page-sizes="[2, 4, 6, 8]"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="UserTotal">
         </el-pagination>
       </template>
     </el-card>
@@ -153,6 +155,8 @@ export default {
   },
   data () {
     return {
+      size: 2,
+      page: 1,
       UserTotal: 0,
       users: [],
       searchText: '',
@@ -181,9 +185,9 @@ export default {
     }
   },
   methods: {
-    async loadList (page = 1) {
+    async loadList (page = this.page, size = this.size) {
       this.tableLoading = true // 开始请求的时候进入loading状态
-      const { data, meta } = await Users.find({ pagenum: page, pagesize: 5, query: this.searchText })
+      const { data, meta } = await Users.find({ pagenum: page, pagesize: size, query: this.searchText })
       if (meta.status === 200) {
         data.users.forEach(item => {
           item.stateDisabled = false// 在初始化界面的时候填入属性，控制状态按钮是否禁用，默认情况下不禁用
@@ -253,8 +257,13 @@ export default {
       }
       item.stateDisabled = false // 无论结果如何，请求完毕后将按钮的状态设为可用
     },
-    handleAlter () {
-      alert(111)
+    handleSizeChange (size) {
+      this.size = size
+      this.loadList()
+    },
+    handleCurrentChange (page) {
+      this.page = page
+      this.loadList()
     }
   },
   components: {

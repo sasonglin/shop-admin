@@ -7,3 +7,8 @@ export const getRoleList = () => req({
   method: 'get',
   url: '/roles'
 }).then(res => res.data)
+
+export const deleteRoleById = (roleId) => req({
+  method: 'delete',
+  url: `/roles/${roleId}`
+}).then(res => res.data)
