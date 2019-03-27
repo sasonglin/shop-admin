@@ -208,8 +208,7 @@ export default {
       })
     },
     async submitAdd () {
-      const { meta, data } = await Users.create(this.addFormData)
-      console.log(data);
+      const { meta } = await Users.create(this.addFormData)
       if (meta.status === 201) {
         this.$message({
           message: `恭喜你：${meta.msg}`,

@@ -6,7 +6,7 @@
       </div>
       <el-row :gutter="20">
         <el-col :span="4">
-          <el-button type="primary" @click="addFormList = true">添加用户</el-button>
+          <el-button type="primary" @click="$refs.showAddFormEL.showRoleAdd()">添加用户</el-button>
         </el-col>
       </el-row>
       <template>
@@ -16,6 +16,11 @@
           border
           v-loading="tableLoading"
           style="width: 100%">
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              hello
+            </template>
+          </el-table-column>
           <el-table-column type="index"></el-table-column>
           <el-table-column
             prop="roleName"
@@ -48,11 +53,15 @@
         </el-table>
       </template>
     </el-card>
+    <RoleAdd ref = 'showAddFormEL'
+    @successAdd = 'loadList'
+    ></RoleAdd>
   </div>
 </template>
 
 <script>
 import * as Roles from '@/api/role.js'
+import RoleAdd from './role-add.vue'
 export default {
   created () {
     this.loadList()
@@ -72,17 +81,29 @@ export default {
       }
     },
     async handleRoleDelete (id) {
-      const { meta } = await Roles.deleteRoleById(id)
-      if (meta.status === 200) {
+      this.$confirm('此操作会删除数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const { meta } = await Roles.deleteRoleById(id)
+        if (meta.status === 200) {
+          this.$message({
+            message: `${meta.msg}`,
+            type: 'success'
+          })
+          this.loadList()
+        }
+      }).catch(() => {
         this.$message({
-          message: `${meta.msg}`,
-          type: 'success'
-        })
-        this.loadList()
-      }
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
   },
   components: {
+    RoleAdd
   }
 }
 </script>
