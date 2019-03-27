@@ -91,7 +91,8 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="page"
-          :page-sizes="[2, 4, 6, 8]"
+          :page-sizes="[5, 10, 15]"
+          :page-size = '5'
           layout="total, sizes, prev, pager, next, jumper"
           :total="UserTotal">
         </el-pagination>
@@ -150,7 +151,7 @@ export default {
   },
   data () {
     return {
-      size: 2,
+      size: 5,
       page: 1,
       UserTotal: 0,
       users: [],

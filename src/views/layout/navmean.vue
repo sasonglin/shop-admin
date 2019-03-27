@@ -8,19 +8,19 @@
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b">
-    <el-submenu index="1">
+    <el-submenu v-for="first in rightsMenus" :key='first.id' :index='first.path'>
       <template slot="title">
         <i class="fas fa-user-secret fa-lg"></i>
-        <span>用户管理</span>
+        <span>{{ first.authName }}</span>
       </template>
-      <el-menu-item index="/users">
+      <el-menu-item v-for="second in first.children" :key='second.id' :index="`/${second.path}`">
         <template slot="title">
           <i class="el-icon-tickets"></i>
-          <span>用户列表</span>
+          <span>{{ second.authName }}</span>
       </template>
       </el-menu-item>
     </el-submenu>
-    <el-submenu index="2">
+    <!-- <el-submenu index="2">
       <template slot="title">
         <i class="fas fa-fist-raised fa-lg"></i>
         <span>权限管理</span>
@@ -85,19 +85,34 @@
           <span>数据报表</span>
         </template>
       </el-menu-item>
-    </el-submenu>
+    </el-submenu> -->
    </el-menu>
 </template>
 
 <script>
+import { getMeanNav } from '@/api/menus.js'
 export default {
   name: 'Navmean',
+  created () {
+    this.loadList()
+  },
+  data () {
+    return {
+      rightsMenus: []
+    }
+  },
   methods: {
     handleOpen (key, keyPath) {
       console.log(key, keyPath);
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath);
+    },
+    async loadList () {
+      const { data, meta } = await getMeanNav()
+      if (meta.status === 200) {
+        this.rightsMenus = data
+      }
     }
   }
 }
