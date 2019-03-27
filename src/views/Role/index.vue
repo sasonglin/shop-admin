@@ -1,9 +1,5 @@
 <template>
   <div class="main">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <AppBreadcrumb :list="[{ label: '首页', path: '/' }, { label: '权限管理' }, { label: '角色列表' }]"></AppBreadcrumb>
-      </div>
       <el-row :gutter="20">
         <el-col :span="4">
           <el-button type="primary" @click="$refs.showAddFormEL.showRoleAdd()">添加用户</el-button>
@@ -80,7 +76,6 @@
           </el-table-column>
         </el-table>
       </template>
-    </el-card>
     <!-- 新增 -->
     <RoleAdd ref = 'showAddFormEL'
     @successAdd = 'loadList'

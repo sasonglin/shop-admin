@@ -1,9 +1,5 @@
 <template>
   <div class="main">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <AppBreadcrumb :list="[{ label: '首页', path: '/' }, { label: '用户管理' }, { label: '用户列表' }]"></AppBreadcrumb>
-      </div>
       <el-row :gutter="20">
         <el-col :span="7">
           <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
@@ -100,7 +96,6 @@
           :total="UserTotal">
         </el-pagination>
       </template>
-    </el-card>
     <el-dialog title="添加用户" :visible.sync="addFormList" width=40%>
       <el-form :model="addFormData" size="middle" :rules="addFormRules" ref='addFormDataEL'>
         <el-form-item label="用户名 :" label-width="75px" prop="username">
