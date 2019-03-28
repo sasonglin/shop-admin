@@ -28,6 +28,9 @@ import AppHeader from './header.vue'
 import Navmean from './navmean'
 
 export default {
+  created () {
+    console.log(this.$route.matched)
+  },
   methods: {
     getAppBreadcrumbs () {
       const bread = [{ label: '首页', path: '/' }]

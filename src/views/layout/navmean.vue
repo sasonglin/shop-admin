@@ -3,6 +3,7 @@
     default-active="2"
     class="el-menu-vertical-demo"
     @open="handleOpen"
+    :unique-opened='true'
     :router="true"
     @close="handleClose"
     background-color="#545c64"
