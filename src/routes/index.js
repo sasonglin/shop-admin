@@ -14,6 +14,7 @@ import Home from '@/views/Home/index.vue'
 import Users from '@/views/Users/index.vue'
 import Roles from '@/views/Role/index.vue'
 import Rights from '@/views/Rights/index.vue'
+import Goods from '@/views/Goods/index.vue'
 import { getToken } from '@/utils/auth.js'
 
 Vue.use(Router)
@@ -47,6 +48,16 @@ const router = new Router({
           children: [
             { path: '/rights/roles', component: Roles, meta: { label: '角色管理' } },
             { path: '/rights/rights', component: Rights, meta: { label: '权限列表' } }
+          ]
+        },
+        {
+          path: '/goods',
+          component: {
+            render: c => c('router-view')
+          },
+          meta: { label: '商品管理' },
+          children: [
+            { path: '/goods/goods', component: Goods, meta: { label: '商品列表' } }
           ]
         }
         // { path: '/roles', component: Roles },

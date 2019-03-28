@@ -21,6 +21,15 @@ export const create = ({ roleName, roleDesc }) => req({
     roleDesc
   }
 }).then(res => res.data)
+// 修改角色
+export const editRoleById = (roleId, data) => req({
+  method: 'put',
+  url: `/roles/${roleId}`,
+  data: {
+    roleName: data.roleName,
+    roleDesc: data.roleDesc
+  }
+}).then(res => res.data)
 
 // 更新角色权限列表
 // rid 需要提供以 , 分割的字符串 id，注意：父节点id也需要

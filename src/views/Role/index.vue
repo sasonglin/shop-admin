@@ -2,7 +2,7 @@
   <div class="main">
       <el-row :gutter="20">
         <el-col :span="4">
-          <el-button type="primary" @click="$refs.showAddFormEL.showRoleAdd()">添加用户</el-button>
+          <el-button type="primary" @click="$refs.showAddFormEL.showRoleAdd()">添加角色</el-button>
         </el-col>
       </el-row>
       <template>
@@ -65,6 +65,7 @@
             label="操作">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" round
+              @click="$refs.showEditFormEL.showEditForm(scope.row)"
               >编辑</el-button>
               <el-button size="mini" type="danger" round
               @click="handleRoleDelete(scope.row.id)"
@@ -84,6 +85,8 @@
     <RightsList ref = 'showRightsEL'
     @editRightsuccess = 'loadList'
     ></RightsList>
+    <!-- 编辑角色 -->
+    <RoleEdit ref='showEditFormEL'></RoleEdit>
   </div>
 </template>
 
@@ -91,6 +94,7 @@
 import * as Roles from '@/api/role.js'
 import RoleAdd from './role-add.vue'
 import RightsList from './edit-right.vue'
+import RoleEdit from './edit-role.vue'
 export default {
   created () {
     this.loadList()
@@ -144,12 +148,16 @@ export default {
   },
   components: {
     RoleAdd,
-    RightsList
+    RightsList,
+    RoleEdit
   }
 }
 </script>
 
 <style scoped>
+.main {
+  height:100%;
+}
 .el-card {
  height: 100%;
 }
@@ -157,7 +165,7 @@ export default {
   margin-top: 15px;
 }
 .first {
-  margin-bottom: 10px;
+  margin-top:10px;
 }
 
 .second, .third {

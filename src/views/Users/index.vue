@@ -17,7 +17,7 @@
           border
           v-loading="tableLoading"
           style="width: 100%">
-          <el-table-column type="index"></el-table-column>
+          <el-table-column type="index" label="编号" width="60px"></el-table-column>
           <el-table-column
             prop="username"
             label="姓名"
