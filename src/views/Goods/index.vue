@@ -67,6 +67,7 @@
 <script>
 import { getGoodsList, deleteGoodsById } from '@/api/goods.js'
 export default {
+  name: 'GoodsList',
   created () {
     this.loadGoodsList()
   },

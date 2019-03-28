@@ -65,4 +65,7 @@ export default {
 .el-menu {
   height: 100%;
 }
+.el-card {
+  min-height: 100%;
+}
 </style>
