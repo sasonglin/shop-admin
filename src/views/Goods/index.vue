@@ -35,9 +35,11 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="add_time"
         label="创建时间"
         width="180">
+        <template slot-scope="scope">
+          {{ scope.row.add_time | dataFormat() }}
+        </template>
       </el-table-column>
       <el-table-column
         label="操作">
