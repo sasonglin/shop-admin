@@ -2,7 +2,7 @@
 <div class="main">
   <el-row :gutter="20">
     <el-col :span="7">
-      <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select" @keyup.native='loadGoodsList()'>
+      <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
         <el-button slot="append" icon="el-icon-search" @click="loadGoodsList()"></el-button>
       </el-input>
     </el-col>
@@ -13,6 +13,7 @@
       border
       stripe
       style="width: 100%">
+      <el-table-column type="index" label="编号" width="60px"></el-table-column>
       <el-table-column
         prop="goods_name"
         label="商品名称"
