@@ -6,6 +6,9 @@
         <el-button slot="append" icon="el-icon-search" @click="loadGoodsList()"></el-button>
       </el-input>
     </el-col>
+    <el-col :span="4">
+        <el-button type="primary" @click="$router.push({ name: 'goodsadd' })">添加用户</el-button>
+    </el-col>
   </el-row>
   <template>
     <el-table

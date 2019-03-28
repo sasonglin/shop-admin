@@ -15,6 +15,7 @@ import Users from '@/views/Users/index.vue'
 import Roles from '@/views/Role/index.vue'
 import Rights from '@/views/Rights/index.vue'
 import Goods from '@/views/Goods/index.vue'
+import GoodsAdd from '@/views/Goods/add-goods.vue'
 import { getToken } from '@/utils/auth.js'
 
 Vue.use(Router)
@@ -30,34 +31,37 @@ const router = new Router({
         // Home 展示到父路由的 router-view 中，path 为空，则默认作为 / Layout 展示的组件
         { path: '', component: Home },
         {
+          name: 'users',
           path: '/users',
           component: {
             render: c => c('router-view') // 这个路由是一个直接渲染了 router-view 标签的组件
           },
           meta: { label: '用户管理' },
           children: [
-            { path: '/users/users', component: Users, meta: { label: '用户列表' } }
+            { name: 'userslist', path: '/users/users', component: Users, meta: { label: '用户列表' } }
           ]
         },
         {
+          name: 'rights',
           path: '/rights',
           component: {
             render: c => c('router-view')
           },
           meta: { label: '权限管理' },
           children: [
-            { path: '/rights/roles', component: Roles, meta: { label: '角色管理' } },
-            { path: '/rights/rights', component: Rights, meta: { label: '权限列表' } }
+            { name: 'roleslist', path: '/rights/roles', component: Roles, meta: { label: '角色管理' } },
+            { name: 'rightslist', path: '/rights/rights', component: Rights, meta: { label: '权限列表' } }
           ]
         },
-        {
+        { name: 'goods',
           path: '/goods',
           component: {
             render: c => c('router-view')
           },
           meta: { label: '商品管理' },
           children: [
-            { path: '/goods/goods', component: Goods, meta: { label: '商品列表' } }
+            { name: 'goodslist', path: '/goods/goods', component: Goods, meta: { label: '商品列表' } },
+            { name: 'goodsadd', path: '/goods/toadd', component: GoodsAdd, meta: { label: '添加商品' } }
           ]
         }
         // { path: '/roles', component: Roles },
