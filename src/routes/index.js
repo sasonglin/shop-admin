@@ -16,6 +16,7 @@ import Roles from '@/views/Role/index.vue'
 import Rights from '@/views/Rights/index.vue'
 import Goods from '@/views/Goods/index.vue'
 import GoodsAdd from '@/views/Goods/add-goods.vue'
+import Params from '@/views/Goods/params.vue'
 import { getToken } from '@/utils/auth.js'
 
 Vue.use(Router)
@@ -61,7 +62,8 @@ const router = new Router({
           meta: { label: '商品管理' },
           children: [
             { name: 'goodslist', path: '/goods/goods', component: Goods, meta: { label: '商品列表' } },
-            { name: 'goodsadd', path: '/goods/toadd', component: GoodsAdd, meta: { label: '添加商品' } }
+            { name: 'goodsadd', path: '/goods/toadd', component: GoodsAdd, meta: { label: '添加商品' } },
+            { name: 'params', path: '/goods/params', component: Params, meta: { label: '分类参数' } }
           ]
         }
         // { path: '/roles', component: Roles },

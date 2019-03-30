@@ -11,7 +11,8 @@
           stripe
           border
           v-loading="tableLoading"
-          style="width: 100%">
+          style="width: 100%"
+          row-key="id">
           <el-table-column type="expand">
             <template slot-scope="scope">
                <!-- 一级 -->
@@ -24,7 +25,7 @@
                 <hr>
                 <el-col :span="20">
                    <!-- 二级 -->
-                  <el-row class="second" v-for="second in first.children" :key="second.id">
+                  <el-row class="second" v-for="second in first.children" :key="+second.id">
                     <el-col :span="4">
                       <el-tag closable type="success" @close="handleDeleteRights(scope.row, second)">{{ second.authName }}</el-tag>
                       <i class="el-icon-arrow-right"></i>
@@ -109,6 +110,7 @@ export default {
     async loadList () {
       const { data, meta } = await Roles.getRoleList()
       if (meta.status === 200) {
+        console.log(data)
         this.roles = data
         this.tableLoading = false
       }

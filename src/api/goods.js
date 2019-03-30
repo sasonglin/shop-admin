@@ -17,3 +17,26 @@ export const deleteGoodsById = (goodsId) => req({
   method: 'delete',
   url: `/goods/${goodsId}`
 }).then(res => res.data)
+
+// 新增商品
+export const addGoods = ({ goods_name,
+  goods_cat,
+  goods_price,
+  goods_number,
+  goods_weight,
+  goods_introduce = '',
+  pics = {},
+  attrs = [] }) => req({
+  method: 'post',
+  url: '/goods',
+  data: { // post 参数
+    goods_name,
+    goods_cat,
+    goods_price,
+    goods_number,
+    goods_weight,
+    goods_introduce,
+    pics,
+    attrs
+  }
+}).then(res => res.data)

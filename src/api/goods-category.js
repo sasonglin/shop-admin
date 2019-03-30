@@ -9,3 +9,11 @@ export const getGoodsCategoryList = (type = 3) => req({
     type
   }
 }).then(res => res.data)
+
+export const getGoodsParamsList = (catId, sel = 'many') => req({
+  method: 'get',
+  url: `categories/${catId}/attributes`,
+  params: {
+    sel
+  }
+}).then(res => res.data)

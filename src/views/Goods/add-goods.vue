@@ -40,8 +40,8 @@
         </el-form-item>
         <el-form-item label="是否促销">
           <el-radio-group v-model="formData.is_promote">
-            <el-radio label="线上品牌商赞助"></el-radio>
-            <el-radio label="线下场地免费"></el-radio>
+            <el-radio :label="true">是</el-radio>
+            <el-radio :label="false">否</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item>
@@ -59,8 +59,8 @@
 </template>
 
 <script>
-import { getGoodsCategoryList } from '@/api/goods-category.js'
-import { constants } from 'fs';
+import { getGoodsCategoryList, getGoodsParamsList } from '@/api/goods-category.js'
+import { addGoods } from '@/api/goods.js'
 export default {
   name: 'AddGoods',
   created () {
@@ -77,14 +77,13 @@ export default {
         is_promote: false
       },
       goodsCategories: [],
-      selectedOptions: [],
-      selectedOptions2: []
+      goodsCategoryAttrs: [], // 商品属性
+      goodsCategoryParams: [], // 商品参数
     }
   },
   methods: {
     async loadGoodsCategories () {
       const { data, meta } = await getGoodsCategoryList()
-      console.log(data, meta)
       if (meta.status === 200) {
         this.goodsCategories = data
       }
@@ -92,7 +91,30 @@ export default {
     handleChange (value) {
       console.log(value)
     },
-    onSubmit () {
+    async onSubmit () {
+      const {
+        goods_name,
+        goods_price,
+        goods_weight,
+        goods_number,
+        goods_cat,
+        is_promote
+      } = this.formData
+      const { data, meta } = await addGoods({
+        goods_name,
+        goods_price,
+        goods_weight,
+        goods_number,
+        goods_cat: goods_cat.join(','),
+        is_promote
+      })
+      if (meta.status === 201) {
+        this.$message({
+          type: 'success',
+          message: '添加成功'
+        })
+        this.$router.replace('/goods/goods')
+      }
     }
   }
 }
