@@ -76,7 +76,25 @@
         </el-form-item>
       </el-form>
     </el-tab-pane>
-    <el-tab-pane label="商品图片">定时任务补偿</el-tab-pane>
+    <el-tab-pane label="商品图片">
+      <!--
+        action :给其地址，组件会自动发送请求
+        headers :设置上传的请求头部(由于是组建自动发送请求，所以不走拦截器，这里需要手动写入token)
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :file-list="fileList"
+        upload 会自己去请求
+        :on-success 虽然是属性，但在图片上传成功时会执行定义好的方法
+         -->
+      <el-upload
+        action="http://localhost:8888/api/private/v1/upload"
+        :on-success = "handleUploadSuccess"
+        :headers = "uploadHeaders"
+        list-type="picture">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+    </el-tab-pane>
     <el-tab-pane label="商品内容">定时任务补偿</el-tab-pane>
   </el-tabs>
  </div>
@@ -84,6 +102,7 @@
 
 <script>
 import { getGoodsCategoryList, getGoodsParamsList } from '@/api/goods-category.js'
+import { getToken } from '@/utils/auth.js'
 import { addGoods } from '@/api/goods.js'
 export default {
   name: 'AddGoods',
@@ -92,13 +111,17 @@ export default {
   },
   data () {
     return {
+      uploadHeaders: { // 配置上传的请求头
+        Authorization: getToken()
+      },
       formData: {
         goods_name: '',
         goods_price: '',
         goods_weight: '',
         goods_number: '',
         goods_cat: [],
-        is_promote: false
+        is_promote: false,
+        pics:[]
       },
       goodsCategories: [],
       goodsCategoryAttrs: [], // 商品属性
@@ -127,15 +150,29 @@ export default {
         goods_weight,
         goods_number,
         goods_cat,
-        is_promote
+        is_promote,
+        pics
       } = this.formData
 
-      const attrs = this.goodsCategoryParams.map(item => {
+      // 商品属性
+      const categoryParams = this.goodsCategoryParams.map(item => {
         return {
           attr_id: item.attr_id,
-          attr_vals: item.attr_vals
+          attr_value: item.attr_vals
         }
       })
+
+      // 商品参数
+      const categoryAttrs = this.goodsCategoryParams.map(item => {
+        return {
+          attr_id: item.attr_id,
+          attr_value: item.attr_selected_vals.join(',') // 字符串需要','隔开,将数组转换为字符串
+        }
+      }).filter(item => item.attr_value.length > 0) // 以防加入空字符
+
+      // 将获得的数据并成一个数组提交到服务器接口
+      const attrs = [...categoryAttrs, ...categoryParams]
+      console.log(attrs)
 
       const { meta } = await addGoods({
         goods_name,
@@ -144,7 +181,8 @@ export default {
         goods_number,
         goods_cat: goods_cat.join(','),
         is_promote,
-        attrs
+        attrs,
+        pics
       })
       if (meta.status === 201) {
         this.$message({
@@ -168,6 +206,16 @@ export default {
         })
         this.goodsCategoryParams = data
       }
+    },
+    /**
+     * 上传图片成功处理函数
+     * response 是请求成功的响应数据
+     * file 上传的文件信息对象
+     */
+    handleUploadSuccess (response, file) {
+     this.formData.pics.push({
+       pic: response.data.tmp_path
+     })
     }
 
   }
