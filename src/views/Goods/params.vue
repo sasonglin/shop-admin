@@ -84,7 +84,7 @@ export default {
       formParamsMany: [],
       id: '',
       goodsCategories: [],
-      selectedOptions: [1,3,6]
+      selectedOptions: [1, 3, 6]
     }
   },
   methods: {
@@ -96,7 +96,7 @@ export default {
     },
     async loadGoodsParams () {
       const { data, meta } = await getGoodsParamsList(this.selectedOptions[this.selectedOptions.length - 1], 'only')
-      const { data:dataMany } = await getGoodsParamsList(this.selectedOptions[this.selectedOptions.length - 1])
+      const { data: dataMany } = await getGoodsParamsList(this.selectedOptions[this.selectedOptions.length - 1])
       if (meta.status === 200) {
         this.formParamsOnly = data
         this.formParamsMany = dataMany

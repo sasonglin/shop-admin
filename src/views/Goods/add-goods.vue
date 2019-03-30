@@ -50,8 +50,32 @@
         </el-form-item>
       </el-form>
     </el-tab-pane>
-    <el-tab-pane label="商品参数">配置管理</el-tab-pane>
-    <el-tab-pane label="商品属性">角色管理</el-tab-pane>
+    <el-tab-pane label="商品参数">
+      <el-row class="param-row" v-for="param in goodsCategoryParams" :key="param.attr_id">
+        <el-col :span="4"> {{ param.attr_name }} </el-col>
+        <el-col :span="20">
+          <el-checkbox-group  v-model="param.attr_selected_vals" size="small">
+            <el-checkbox
+            class="s-cb"
+            :label="val"
+            border
+            v-for="val in param.attr_selected_vals"
+            :key = 'val+ Math.random()'
+            >
+
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-col>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane label="商品属性">
+      <el-form label-position="right" label-width="120px">
+        <el-form-item :label="attr.attr_name"
+        v-for="attr in goodsCategoryAttrs" :key="attr.attr_id">
+          <el-input v-model="attr.attr_vals"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-tab-pane>
     <el-tab-pane label="商品图片">定时任务补偿</el-tab-pane>
     <el-tab-pane label="商品内容">定时任务补偿</el-tab-pane>
   </el-tabs>
@@ -78,7 +102,7 @@ export default {
       },
       goodsCategories: [],
       goodsCategoryAttrs: [], // 商品属性
-      goodsCategoryParams: [], // 商品参数
+      goodsCategoryParams: [] // 商品参数
     }
   },
   methods: {
@@ -89,7 +113,12 @@ export default {
       }
     },
     handleChange (value) {
-      console.log(value)
+      const catId = value[value.length - 1]
+
+      // 根据用户所选分类加载商品属性
+      this.loadGoodsCategoriesAttrs(catId)
+      // 根据用户所选分类加载商品参数
+      this.loadGoodsCategoriesParams(catId)
     },
     async onSubmit () {
       const {
@@ -100,13 +129,22 @@ export default {
         goods_cat,
         is_promote
       } = this.formData
-      const { data, meta } = await addGoods({
+
+      const attrs = this.goodsCategoryParams.map(item => {
+        return {
+          attr_id: item.attr_id,
+          attr_vals: item.attr_vals
+        }
+      })
+
+      const { meta } = await addGoods({
         goods_name,
         goods_price,
         goods_weight,
         goods_number,
         goods_cat: goods_cat.join(','),
-        is_promote
+        is_promote,
+        attrs
       })
       if (meta.status === 201) {
         this.$message({
@@ -115,7 +153,23 @@ export default {
         })
         this.$router.replace('/goods/goods')
       }
+    },
+    async loadGoodsCategoriesAttrs (catId) {
+      const { data, meta } = await getGoodsParamsList(catId, 'only') // 获取去商品属性
+      if (meta.status === 200) {
+        this.goodsCategoryAttrs = data
+      }
+    },
+    async loadGoodsCategoriesParams (catId) {
+      const { data, meta } = await getGoodsParamsList(catId) // 获取去商品参数
+      if (meta.status === 200) {
+        data.forEach(param => {
+          param.attr_selected_vals = param.attr_vals.split(',')
+        })
+        this.goodsCategoryParams = data
+      }
     }
+
   }
 }
 </script>
@@ -129,5 +183,11 @@ export default {
 }
 .el-cascader {
   width: 100%;
+}
+.param-row {
+  margin-bottom: 15px;
+}
+.s-cb {
+  margin-bottom: 10px;
 }
 </style>
