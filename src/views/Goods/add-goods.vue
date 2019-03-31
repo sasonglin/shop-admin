@@ -1,14 +1,14 @@
 <template>
- <div>
-   <el-steps :active="1" simple>
+ <div class="main">
+   <el-steps :active="activeStep" simple>
     <el-step title="步骤 1" icon="el-icon-edit"></el-step>
     <el-step title="步骤 2" icon="el-icon-tickets"></el-step>
     <el-step title="步骤 3" icon="el-icon-edit-outline"></el-step>
     <el-step title="步骤 4" icon="el-icon-upload"></el-step>
     <el-step title="步骤 5" icon="el-icon-success"></el-step>
   </el-steps>
-  <el-tabs tab-position="left">
-    <el-tab-pane label="基本信息">
+  <el-tabs tab-position="left" @tab-click="handleTabChange" v-model='activeTab'>
+    <el-tab-pane label="基本信息" name="基本信息">
        <el-form ref="form" :model="formData" label-width="80px">
         <el-form-item label="商品名称">
           <el-input v-model="formData.goods_name"></el-input>
@@ -44,13 +44,10 @@
             <el-radio :label="false">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
-          <el-button>取消</el-button>
-        </el-form-item>
+        <el-button type="primary" @click="handleNextStep('商品参数', 1)">下一步</el-button>
       </el-form>
     </el-tab-pane>
-    <el-tab-pane label="商品参数">
+    <el-tab-pane label="商品参数" name="商品参数">
       <el-row class="param-row" v-for="param in goodsCategoryParams" :key="param.attr_id">
         <el-col :span="4"> {{ param.attr_name }} </el-col>
         <el-col :span="20">
@@ -62,21 +59,22 @@
             v-for="val in param.attr_selected_vals"
             :key = 'val+ Math.random()'
             >
-
             </el-checkbox>
           </el-checkbox-group>
         </el-col>
       </el-row>
+      <el-button type="primary" @click="handleNextStep('商品属性', 2)">下一步</el-button>
     </el-tab-pane>
-    <el-tab-pane label="商品属性">
+    <el-tab-pane label="商品属性" name="商品属性">
       <el-form label-position="right" label-width="120px">
         <el-form-item :label="attr.attr_name"
         v-for="attr in goodsCategoryAttrs" :key="attr.attr_id">
           <el-input v-model="attr.attr_vals"></el-input>
         </el-form-item>
+        <el-button type="primary" @click="handleNextStep('商品图片', 3)">下一步</el-button>
       </el-form>
     </el-tab-pane>
-    <el-tab-pane label="商品图片">
+    <el-tab-pane label="商品图片" name="商品图片">
       <!--
         action :给其地址，组件会自动发送请求
         headers :设置上传的请求头部(由于是组建自动发送请求，所以不走拦截器，这里需要手动写入token)
@@ -94,8 +92,17 @@
         <el-button size="small" type="primary">点击上传</el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
+      <el-button type="primary" @click="handleNextStep('商品内容', 4)">下一步</el-button>
     </el-tab-pane>
-    <el-tab-pane label="商品内容">定时任务补偿</el-tab-pane>
+    <el-tab-pane label="商品内容" name="商品内容">
+      <!-- bidirectional data binding（双向数据绑定） -->
+      <quill-editor v-model="formData.goods_introduce" ref="myQuillEditor">
+      </quill-editor>
+         <el-row class="send">
+          <el-button type="primary" @click="onSubmit">立即创建</el-button>
+          <el-button>取消</el-button>
+         </el-row>
+    </el-tab-pane>
   </el-tabs>
  </div>
 </template>
@@ -104,6 +111,14 @@
 import { getGoodsCategoryList, getGoodsParamsList } from '@/api/goods-category.js'
 import { getToken } from '@/utils/auth.js'
 import { addGoods } from '@/api/goods.js'
+
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+import { quillEditor } from 'vue-quill-editor'
+
 export default {
   name: 'AddGoods',
   created () {
@@ -115,17 +130,20 @@ export default {
         Authorization: getToken()
       },
       formData: {
-        goods_name: '',
-        goods_price: '',
-        goods_weight: '',
-        goods_number: '',
-        goods_cat: [],
-        is_promote: false,
-        pics:[]
+        goods_name: '', // 商品名称
+        goods_price: '', // 商品价格
+        goods_weight: '', // 商品重量
+        goods_number: '', // 商品数量
+        goods_cat: [], // 商品分类
+        is_promote: false, // 是否促销
+        pics: [], // 商品图片
+        goods_introduce: '' // 商品介绍
       },
       goodsCategories: [],
       goodsCategoryAttrs: [], // 商品属性
-      goodsCategoryParams: [] // 商品参数
+      goodsCategoryParams: [], // 商品参数
+      activeTab: '基本信息',
+      activeStep: 0
     }
   },
   methods: {
@@ -151,7 +169,8 @@ export default {
         goods_number,
         goods_cat,
         is_promote,
-        pics
+        pics,
+        goods_introduce
       } = this.formData
 
       // 商品属性
@@ -182,7 +201,8 @@ export default {
         goods_cat: goods_cat.join(','),
         is_promote,
         attrs,
-        pics
+        pics,
+        goods_introduce
       })
       if (meta.status === 201) {
         this.$message({
@@ -213,18 +233,36 @@ export default {
      * file 上传的文件信息对象
      */
     handleUploadSuccess (response, file) {
-     this.formData.pics.push({
-       pic: response.data.tmp_path
-     })
+      this.formData.pics.push({
+        pic: response.data.tmp_path
+      })
+    },
+    // tab 选中处理
+    handleTabChange (tab) {
+      this.activeStep = tab.index - 0
+    },
+    // 处理下一步操作
+    handleNextStep (tabName, index) {
+      this.activeStep = index
+      this.activeTab = tabName
     }
 
+  },
+  components: {
+    QuillEditor: quillEditor
   }
 }
 </script>
 
 <style scoped>
+.main {
+  min-height: 500px;
+}
 .el-tabs {
   margin-top: 30px;
+}
+.el-tabs__content {
+  height: 500px;
 }
 .el-input {
   width: 100%;
@@ -237,5 +275,11 @@ export default {
 }
 .s-cb {
   margin-bottom: 10px;
+}
+.ql-editor {
+  height: 500px;
+}
+.send {
+  margin-top: 20px;
 }
 </style>
